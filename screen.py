@@ -1,13 +1,19 @@
+
 import pynput as pnp
 import time
 import ctypes
 
 
 class Application:
-    pause = 1.5
+    start_record_key = pnp.keyboard.Key.alt_l
+    stop_record_key = pnp.keyboard.Key.f2
+    stop_key = pnp.keyboard.Key.shift_l
+    start_control_key = pnp.keyboard.Key.ctrl_l
+
     scale_factor = ctypes.windll.shcore.GetScaleFactorForDevice(0) / 100.0
     #print(f"当前DPI缩放比例: {scale_factor * 100}%")
     def __init__(self):
+        print("Initializing...")
         self.is_started = False
         self.is_recording = False
         self.is_controlling = False
@@ -19,6 +25,8 @@ class Application:
                                                        on_release=self.on_release)
 
         self.mode = 'OneTime'
+        self.last_time = time.time()
+        print("Initialization complete.")
 
     def __del__(self):
         print("Deleting Application")
@@ -31,16 +39,23 @@ class Application:
         self.keyboard_listener.start()
 
     def stop(self):
+        print("Stopping Application")
         print(self.record_positions)
+        if self.is_recording:
+            self.stop_record()
+        if self.is_controlling:
+            self.stop_control()
         if not self.is_started:
             print("Not started yet!")
             return
+
         self.is_started = False
         self.mouse_listener.stop()
         self.keyboard_listener.stop()
 
     def start_record(self):
         print("Start recording")
+        self.last_time = time.time()
         self.is_recording = True
 
     def stop_record(self):
@@ -53,11 +68,13 @@ class Application:
         time.sleep(5)
         print("Start control")
         mouse = pnp.mouse.Controller()
-        for x, y, button in self.record_positions:
+        for x, y, button, duration in self.record_positions:
+            if not self.is_controlling:
+                break
             print(f"x = {x}, y = {y}, button = {button}")
             mouse.position = (round(x / Application.scale_factor), round(y / Application.scale_factor))
             mouse.click(button)
-            time.sleep(Application.pause)
+            time.sleep(duration)
 
         self.stop_control()
 
@@ -69,9 +86,11 @@ class Application:
         print('滚动中... {} 至 {}'.format('向下：' if dy < 0 else '向上：', (x, y)))
 
     def on_click(self, x, y, button, pressed):
+        now_time = time.time()
         if pressed and self.is_recording and not self.is_controlling:
-            self.record_positions.append((x,y,button))
+            self.record_positions.append((x,y,button, now_time - self.last_time))
         print('鼠标按键：{}，在位置处 {}, {} '.format(button, (x, y), '按下了' if pressed else '释放了'))
+        self.last_time = time.time()
 
     def on_move(self, x, y):
         #print('鼠标移动到了：{}'.format((x, y)))
@@ -85,13 +104,14 @@ class Application:
         print(str(key).capitalize() + ' key has been released')
 
     def key_press_event(self, key):
-        if key == pnp.keyboard.Key.alt_l:
+        if key == Application.start_record_key:
             self.start_record()
-        elif key == pnp.keyboard.Key.f2:
+        elif key == Application.stop_record_key:
             self.stop_record()
-        elif key == pnp.keyboard.Key.ctrl_l:
+        elif key == Application.start_control_key:
             self.start_control()
-        elif key == pnp.keyboard.Key.shift_l:
+        elif key == Application.stop_key:
             self.stop()
+            print("The shift key has been pressed, the program will stop.")
 
 

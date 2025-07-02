@@ -8,11 +8,15 @@ def main():
             time.sleep(3)
     except KeyboardInterrupt:
         app.stop()
-
-
-
+    finally:
+        app.stop()
 
     return 0
+
+def test():
+    a = time.time()
+    time.sleep(1.5)
+    print(time.time() - a)
 
 if __name__ == '__main__':
     main()
