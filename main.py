@@ -1,4 +1,5 @@
-from screen import *
+from App.Application import *
+from Data.DataManager import *
 
 def main():
     app = Application()
@@ -7,16 +8,15 @@ def main():
         while app.is_started:
             time.sleep(3)
     except KeyboardInterrupt:
-        app.stop()
+        pass
     finally:
         app.stop()
 
     return 0
 
 def test():
-    a = time.time()
-    time.sleep(1.5)
-    print(time.time() - a)
+
+    return 0
 
 if __name__ == '__main__':
-    main()
+    test()
