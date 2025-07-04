@@ -1,0 +1,14 @@
+Application: initialized
+Application: started
+Application: starting recording
+Application: stopping recording
+Start control, [(625, 1026, 'Button_left', 1.61606764793396), (222, 1018, 'Button_left', 0.8934516906738281), (464, 1162, 'Button_left', 1.3658535480499268)]
+Application: stopped
+Application: destructed
+Application: initialized
+Application: started
+Application: starting recording
+Application: stopping recording
+Start control, [(2062, 521, 'Button_left', 1.7253391742706299), (251, 1075, 'Button_left', 1.7607715129852295), (403, 190, 'Button_right', 0.8546702861785889), (264, 1084, 'Button_left', 1.0110533237457275)]
+Application: stopped
+Application: destructed

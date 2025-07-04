@@ -17,7 +17,7 @@ class DataManager:
 
     def __del__(self):
         self.write_data()
-        self.logger.info("DataManager deleted")
+        self.logger.info("DataManager deleted\n")
 
     def save_data(self, name:str, data):
         self.data[name] = data
