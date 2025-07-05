@@ -1,21 +1,22 @@
-from App.Application import *
-from Data.DataManager import *
+import sys
+
+from PyQt5.QtWidgets import QApplication, QMainWindow
+
+from App.MouseController import MouseController
+from App.Interaction import Interaction
+from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 def main():
-    app = Application()
-    try:
-        app.start()
-        while app.is_started:
-            time.sleep(3)
-    except KeyboardInterrupt:
-        print("Exiting...")
-        pass
-
-    return 0
+    app = QApplication(sys.argv)
+    window = Interaction()
+    window.show()
+    return app.exec_()
 
 def test():
-
-    return 0
+    a = MouseController()
+    b = MouseController()
+    print(a is b)
 
 if __name__ == '__main__':
-    main()
+    test()

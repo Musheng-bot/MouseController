@@ -13,10 +13,15 @@ class DataManager:
         self.data = {}
         with open(self.file_path, 'r', encoding='utf-8') as f:
             self.data = json.load(f)
+        self.output_file = open(self.file_path, 'w', encoding='utf-8')
+        # with open(self.file_path, 'r', encoding='utf-8') as f:
+        #     self.data = json.load(f)
         self.logger.info("DataManager loaded")
 
     def __del__(self):
         self.write_data()
+        #self.input_file.close()
+        self.output_file.close()
         self.logger.info("DataManager deleted\n")
 
     def save_data(self, name:str, data):
@@ -37,8 +42,9 @@ class DataManager:
         self.logger.info(f"Data '{name}' deleted")
 
     def write_data(self):
-        with open(self.file_path, 'w', encoding='utf-8') as f:
-            json.dump(self.data, f, ensure_ascii=False, indent=4)
+        json.dump(self.data, self.output_file, ensure_ascii=False, indent=4)
+        # with open(self.file_path, 'w', encoding='utf-8') as f:
+        #     json.dump(self.data, f, ensure_ascii=False, indent=4)
         self.logger.info(f"Data written to file {self.file_path}")
 
 
